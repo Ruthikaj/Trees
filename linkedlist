@@ -1,0 +1,64 @@
+class Solution {
+public:
+    // Function to delete a node without any reference to the head pointer.
+    void deleteNode(Node* del_node) {
+        // Step 1: Store the next node of del_node in a temporary pointer.
+        Node* temp = del_node->next;
+
+        // Dry-run example: Initial List = 1 -> 2 -> 3 -> 4 -> 5
+        // del_node points to the node with value 3.
+        // temp = del_node->next = Node with value 4.
+
+        // Step 2: Copy the data of the temp node into del_node.
+        del_node->data = temp->data;
+
+        // After this step:
+        // del_node->data = temp->data = 4.
+        // List now looks like: 1 -> 2 -> 4 -> 4 -> 5.
+        // The value of del_node has been replaced with the value of temp.
+
+        // Step 3: Update the next pointer of del_node to skip temp.
+        del_node->next = temp->next;
+
+        // After this step:
+        // del_node->next = temp->next = Node with value 5.
+        // List now looks like: 1 -> 2 -> 4 -> 5.
+        // The node with value 4 (original temp) has been bypassed.
+
+        // Step 4: Free the memory occupied by temp.
+        delete temp;
+
+        // After this step:
+        // The node with value 4 (original temp) is removed from memory.
+        // Final list: 1 -> 2 -> 4 -> 5.
+    }
+};
+
+// Example Dry Run within the code
+int main() {
+    // Create the linked list: 1 -> 2 -> 3 -> 4 -> 5
+    Node* head = new Node(1);
+    head->next = new Node(2);
+    head->next->next = new Node(3);
+    head->next->next->next = new Node(4);
+    head->next->next->next->next = new Node(5);
+
+    Solution sol;
+
+    // Let's delete the node with value 3.
+    sol.deleteNode(head->next->next); // Passing the node with value 3.
+
+    // Dry-run trace:
+    // Before deletion: 1 -> 2 -> 3 -> 4 -> 5
+    // After deletion:  1 -> 2 -> 4 -> 5
+
+    // Print the updated list to verify.
+    Node* curr = head;
+    while (curr) {
+        printf("%d -> ", curr->data);
+        curr = curr->next;
+    }
+    printf("NULL\n");
+
+    return 0;
+}
